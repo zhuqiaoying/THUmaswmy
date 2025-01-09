@@ -1,0 +1,43 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 或其他你使用的默认分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          lfs: true  # 确保 LFS 文件会被拉取
+        
+      - name: Install Git LFS
+        run: |
+          git lfs install
+        
+      - name: Pull LFS files
+        run: |
+          git lfs pull  # 拉取所有 LFS 文件
+        
+      - name: Move LFS files to assets folder
+        run: |
+          mkdir public
+          cp -r ./* public/
+        
+      - name: Commit LFS files to gh-pages branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add public/assets/
+          git commit -m "Deploy to GitHub Pages"
+          git push origin `git rev-parse --abbrev-ref HEAD`:gh-pages
+        
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: public  # GitHub Pages 会从这个文件夹提供静态内容
