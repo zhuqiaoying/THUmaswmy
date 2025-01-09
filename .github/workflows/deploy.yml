@@ -26,8 +26,8 @@ jobs:
       - name: Move LFS files to assets folder
         run: |
           mkdir public
-          # cp -r ./* public/
-          rsync -av --exclude='public' ./ public/
+          cp -r submissions/* public/submissions/
+          cp data.json public/data.json
         
       - name: Commit LFS files to gh-pages branch
         run: |
