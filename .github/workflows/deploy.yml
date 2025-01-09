@@ -5,6 +5,9 @@ on:
     branches:
       - main  # 或其他你使用的默认分支
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
